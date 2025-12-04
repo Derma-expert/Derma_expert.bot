@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derma_expert.bot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            max-width: 450px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #6a5acd;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .chat-box {
+            height: 500px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .user-message {
+            text-align: right;
+            margin: 10px 0;
+        }
+        .user-message span {
+            background: #6a5acd;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .bot-message {
+            text-align: left;
+            margin: 10px 0;
+        }
+        .bot-message span {
+            background: #e0e0e0;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .input-area {
+            display: flex;
+            border-top: 1px solid #ccc;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            outline: none;
+        }
+        .input-area button {
+            background: #6a5acd;
+            color: white;
+            padding: 12px 15px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="header">Derma_expert.bot</div>
+    <div class="chat-box" id="chatBox">
+        <div class="bot-message"><span>Hello! I am your skin care assistant. Tell me your skin problem 😊</span></div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your skin problem...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+function sendMessage() {
+    let input = document.getElementById("userInput");
+    let message = input.value.trim();
+    if (message === "") return;
+
+    let chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML += `<div class='user-message'><span>${message}</span></div>`;
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    let reply = getBotReply(message.toLowerCase());
+    setTimeout(() => {
+        chatBox.innerHTML += `<div class='bot-message'><span>${reply}</span></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 500);
+}
+
+function getBotReply(msg) {
+    if (msg.includes("pimple") || msg.includes("acne")) {
+        return "For acne: Wash face 2 times daily, use aloe vera gel, apply ice for swelling, avoid oily food.";
+    }
+    if (msg.includes("dry skin")) {
+        return "For dry skin: Apply coconut oil or aloe vera, drink lots of water, avoid hot showers, and use a gentle moisturizer.";
+    }
+    if (msg.includes("dark spots") || msg.includes("hyperpigmentation")) {
+        return "For dark spots: Apply lemon + honey mix (10 min), aloe vera gel at night, use sunscreen daily.";
+    }
+    if (msg.includes("hair fall") || msg.includes("hair")) {
+        return "For hair fall: Apply onion juice, massage with coconut/almond oil, eat protein-rich foods.";
+    }
+    if (msg.includes("tan") || msg.includes("sunburn")) {
+        return "For tanning: Apply curd + turmeric, use aloe vera gel, and use sunscreen before going out.";
+    }
+    return "I’m not fully sure about this problem, but try home remedies like aloe vera, honey, turmeric, and proper hydration. You can describe your issue in more detail 😊";
+}
+</script>
+</body>
+</html>
