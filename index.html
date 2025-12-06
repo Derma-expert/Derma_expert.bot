@@ -2,124 +2,140 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Derma_expert.bot</title>
+    <title>Derma_Expert.bot</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            font-family: Arial;
+            background: #f7f7f7;
             margin: 0;
             padding: 0;
         }
         .chat-container {
+            width: 100%;
             max-width: 450px;
-            margin: 30px auto;
+            margin: auto;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
         }
-        .header {
-            background: #6a5acd;
-            padding: 15px;
-            text-align: center;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .chat-box {
-            height: 500px;
+        #messages {
+            flex: 1;
             padding: 15px;
             overflow-y: auto;
         }
-        .user-message {
-            text-align: right;
-            margin: 10px 0;
-        }
-        .user-message span {
-            background: #6a5acd;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        .bot-message {
-            text-align: left;
-            margin: 10px 0;
-        }
-        .bot-message span {
-            background: #e0e0e0;
-            padding: 10px;
-            border-radius: 10px;
-            display: inline-block;
-        }
+        .bot { color: #0077cc; margin: 10px 0; }
+        .user { color: #333; text-align: right; margin: 10px 0; }
         .input-area {
             display: flex;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid #ddd;
         }
-        .input-area input {
+        #userInput {
             flex: 1;
             padding: 12px;
             border: none;
             outline: none;
         }
-        .input-area button {
-            background: #6a5acd;
+        button {
+            padding: 12px;
+            background: #0077cc;
             color: white;
-            padding: 12px 15px;
             border: none;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
+
 <div class="chat-container">
-    <div class="header">Derma_expert.bot</div>
-    <div class="chat-box" id="chatBox">
-        <div class="bot-message"><span>Hello! I am your skin care assistant. Tell me your skin problem 😊</span></div>
-    </div>
+    <div id="messages"></div>
+
     <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type your skin problem...">
+        <input type="text" id="userInput" placeholder="Ask about your skin problem...">
         <button onclick="sendMessage()">Send</button>
     </div>
 </div>
 
 <script>
-function sendMessage() {
-    let input = document.getElementById("userInput");
-    let message = input.value.trim();
-    if (message === "") return;
+    const messages = document.getElementById("messages");
 
-    let chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML += `<div class='user-message'><span>${message}</span></div>`;
-    input.value = "";
-    chatBox.scrollTop = chatBox.scrollHeight;
+    function addMessage(text, sender) {
+        let msg = document.createElement("div");
+        msg.className = sender;
+        msg.innerText = text;
+        messages.appendChild(msg);
+        messages.scrollTop = messages.scrollHeight;
+    }
 
-    let reply = getBotReply(message.toLowerCase());
-    setTimeout(() => {
-        chatBox.innerHTML += `<div class='bot-message'><span>${reply}</span></div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 500);
-}
+    // --- WELCOME INTENT ---
+    addMessage("Hello! 👋 I am Derma_Expert.bot.\nHow can I help you with your skin problem today?", "bot");
 
-function getBotReply(msg) {
-    if (msg.includes("pimple") || msg.includes("acne")) {
-        return "For acne: Wash face 2 times daily, use aloe vera gel, apply ice for swelling, avoid oily food.";
+    // --- MAIN RESPONSE ENGINE ---
+    function getBotResponse(input) {
+        input = input.toLowerCase();
+
+        // ACNE
+        if (input.includes("acne") || input.includes("pimples")) {
+            return "For acne: Keep your face clean, avoid touching your skin, use gentle cleansers, and apply aloe vera gel. If it persists, consult a dermatologist.";
+        }
+
+        // OILY SKIN
+        if (input.includes("oily")) {
+            return "For oily skin: Wash with mild face wash twice daily, use water-based moisturizers, and apply multani mitti once a week.";
+        }
+
+        // DRY SKIN
+        if (input.includes("dry") || input.includes("rough")) {
+            return "For dry skin: Use fragrance-free moisturizers, drink more water, and apply coconut or almond oil at night.";
+        }
+
+        // PIGMENTATION / DARK SPOTS
+        if (input.includes("pigmentation") || input.includes("dark spots")) {
+            return "For pigmentation: Apply aloe vera gel, use sunscreen daily, and avoid harsh scrubbing. Turmeric + honey mask can help lighten spots.";
+        }
+
+        // RASHES
+        if (input.includes("rash") || input.includes("rashes")) {
+            return "For rashes: Keep the area clean, avoid scratching, and use cool compress. If it spreads, please see a medical professional.";
+        }
+
+        // ITCHING
+        if (input.includes("itch") || input.includes("itching")) {
+            return "For itching: Use cold compress, keep the skin moisturized, and avoid perfumed products.";
+        }
+
+        // SUNBURN / TAN
+        if (input.includes("sunburn") || input.includes("tan")) {
+            return "For sunburn/tan: Apply aloe vera gel, cold milk, or cucumber gel. Always use sunscreen before going out.";
+        }
+
+        // DANDRUFF / SCALP ISSUES
+        if (input.includes("dandruff") || input.includes("scalp")) {
+            return "For dandruff: Use anti-dandruff shampoo, apply warm coconut oil, and keep the scalp clean.";
+        }
+
+        // BLACKHEADS / WHITEHEADS
+        if (input.includes("blackhead") || input.includes("whitehead")) {
+            return "For blackheads: Steam your face gently and exfoliate softly with oatmeal or a mild scrub.";
+        }
+
+        // FALLBACK INTENT
+        return "I'm sorry, I don't have information on that specific issue. Try asking about acne, oily skin, dry skin, pigmentation, rashes, itching, dandruff, sunburn, or other common skin concerns.";
     }
-    if (msg.includes("dry skin")) {
-        return "For dry skin: Apply coconut oil or aloe vera, drink lots of water, avoid hot showers, and use a gentle moisturizer.";
+
+    // --- SEND MESSAGE ---
+    function sendMessage() {
+        const input = document.getElementById("userInput").value;
+        if (input.trim() === "") return;
+
+        addMessage(input, "user");
+
+        const botResponse = getBotResponse(input);
+        setTimeout(() => addMessage(botResponse, "bot"), 400);
+
+        document.getElementById("userInput").value = "";
     }
-    if (msg.includes("dark spots") || msg.includes("hyperpigmentation")) {
-        return "For dark spots: Apply lemon + honey mix (10 min), aloe vera gel at night, use sunscreen daily.";
-    }
-    if (msg.includes("hair fall") || msg.includes("hair")) {
-        return "For hair fall: Apply onion juice, massage with coconut/almond oil, eat protein-rich foods.";
-    }
-    if (msg.includes("tan") || msg.includes("sunburn")) {
-        return "For tanning: Apply curd + turmeric, use aloe vera gel, and use sunscreen before going out.";
-    }
-    return "I’m not fully sure about this problem, but try home remedies like aloe vera, honey, turmeric, and proper hydration. You can describe your issue in more detail 😊";
-}
 </script>
+
 </body>
 </html>
